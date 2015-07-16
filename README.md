@@ -1,4 +1,4 @@
-# describe('Uptake Angular Testing Style Guide', function () {
+# describe('upNgSpecStyle', function () {
 
 *A style guide to good Angular testing practices*
 
