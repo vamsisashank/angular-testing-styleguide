@@ -44,4 +44,10 @@ var serviceMock = sinon.mock({});
 var method = sinon.stub(service, 'method');
 ```
 
+## Browsers
+
+There's no need for fancy Karma launchers. Just launch Karma and visit your IP address at the Karma hosted port (`9876`) on any device on the network.
+
+This is helpful to test in IE 9 and IE 10.
+
 # });
