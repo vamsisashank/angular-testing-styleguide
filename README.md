@@ -36,6 +36,8 @@ context('when something sets up', function () {
 
 Stubs allow observation of existing methods on fixtures and forcing the code down different paths to test all branches.
 
+Mocks have been deprecated and will not be supported in `sinon@2`.
+
 ```javascript
 // Bad
 var serviceMock = sinon.mock({});
