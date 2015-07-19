@@ -16,22 +16,83 @@ describe('nameOfFixture:', function () {
 });
 ```
 
-## Wrap conditions in `context` block
+## Each test starts and ends in an isolate scope
 
 ```javascript
 // Bad
-it('should do something when something sets up', function () {
+before(function () {
     // ...
 });
 
+after(function () {
+
+});
+
 // Good
-context('when something sets up', function () {
-    it('should do something', function () {
+
+beforeEach(function () {
+    // ...
+});
+
+afterEach(function() {
+    // ...
+});
+```
+
+## Use `context` blocks for methods/properties
+* Instance methods/properties are prefixed with a `#`
+* Static methods are prefixed with a `.`
+
+```javascript
+// Bad
+it('does something when something set up', function () {
+    // ...
+});
+
+// Better
+
+context('find()', function () {
+    it('does something', function () {
+        // ...
+    });
+});
+
+// Best
+context('#find()', function () {
+    it('does something', function () {
         // ...
     });
 });
 ```
 
+## Use `describe` blocks for circumstantial groups
+* Think of describe as 'when this...'
+
+```javascript
+// Bad
+context('when passed a variable', function () {
+    // ...
+});
+
+// Good
+describe('when passed a variable', function () {
+    // ...
+});
+``` 
+
+## `it` blocks should be declarative
+
+```javascript
+// Bad
+it('should map arrays', function () {
+    // ...
+});
+
+// Good
+it('maps arrays', function () {
+    // ...
+};
+```
 ## Use Sinon stubs
 
 Stubs allow observation of existing methods on fixtures and forcing the code down different paths to test all branches.
@@ -89,5 +150,9 @@ beforeEach(function () {
 There's no need for fancy Karma launchers. Just launch Karma and visit your IP address at the Karma hosted port (`9876`) on any device on the network.
 
 This is helpful to test in IE 9 and IE 10.
+
+## Tests are single expectations
+
+Each test should have one type of expectation. This helps in make more readable, and useful for debugging.
 
 # });
