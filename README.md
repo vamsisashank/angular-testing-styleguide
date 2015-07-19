@@ -8,10 +8,10 @@ Tests are code, so they should be linted.
 
 ## Wrap spec in `describe` block
 
-Follow this convention for the message: `<name-of-fixture>:`.
+Follow this convention for the message: `<name-of-fixture>:`. Do not include the word `spec` in the name
 
 *Why?:* 
-No need to include spec in name because file name already establishes it is a test.
+Spec has already been established by the filename.
 
 ```javascript
 describe('nameOfFixture:', function () {
@@ -20,9 +20,9 @@ describe('nameOfFixture:', function () {
 ```
 
 ## Each test starts and ends in an isolate scope
-- Ensures that there are no side effects between tests
-*Why?:* You test what you expect to test and nothing else
+Ensures that there are no side effects between tests
 
+*Why?:* You test what you expect to test and nothing else
 
 ```javascript
 // Bad
@@ -46,6 +46,8 @@ afterEach(function() {
 ```
 
 ## Use `context` blocks for methods/properties
+This establishes a standardized structure for tests, allowing future readers to quickly scan and find important parts.
+
 * Instance methods/properties are prefixed with a `#`
 * Static methods are prefixed with a `.`
 
@@ -72,7 +74,7 @@ context('#find()', function () {
 ```
 
 ## Use `describe` blocks for circumstantial groups
-* Think of describe as 'when this...'
+Think of describe as 'when this...'
 
 ```javascript
 // Bad
@@ -87,9 +89,9 @@ describe('when passed a variable', function () {
 ``` 
 
 ## `it` blocks should be declarative
-- Do not start tests with `should`
+Do not start tests with `should`
 
-*Why?:* Should become repetitive
+*Why?:* Should becomes repetitive
 
 *Why?:* Angular is a declarative language and our tests follow that convention. We are not testing what steps
 our program *should* go through, we are testing what the output is. Our tests do not care about what
@@ -159,10 +161,13 @@ beforeEach(function () {
 ```
 
 ## Scoped Variables
-* Each scoped variable needs to be placed inside a beforeEach declaration
-    1. Prevents leaky values and side effects
-* Injected ng service components maintain their `$`
-    1. Maintains readability and expectations
+Each scoped variable needs to be placed inside a beforeEach declaration
+
+- Prevents leaky values and side effects
+    
+Injected ng service components maintain their `$`
+
+- Maintains readability and expectations
 
 ## Browsers
 
