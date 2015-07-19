@@ -2,11 +2,22 @@
 
 *A style guide to good Angular testing practices*
 
+## Table of Contents
+
+1. [Linting](#linting)
+1. [Describe and Context Blocks](#describe-and-context-blocks)
+1. [Scope](#scope)
+1. [Sinon](#sinon)
+1. [ngMock](#ngmock)
+1. [Broswers](#browsers)
+
 ## Linting
+### Why use it?
 
 Tests are code, so they should be linted.
 
-## Wrap spec in `describe` block
+## Describe and Context Blocks
+### Wrap spec in `describe` block
 
 Follow this convention for the message: `<name-of-fixture>:`. Do not include the word `spec` in the name
 
@@ -18,34 +29,7 @@ describe('nameOfFixture:', function () {
     'use strict';
 });
 ```
-
-## Each test starts and ends in an isolate scope
-Ensures that there are no side effects between tests
-
-*Why?:* You test what you expect to test and nothing else
-
-```javascript
-// Bad
-before(function () {
-    // ...
-});
-
-after(function () {
-
-});
-
-// Good
-
-beforeEach(function () {
-    // ...
-});
-
-afterEach(function() {
-    // ...
-});
-```
-
-## Use `context` blocks for methods/properties
+### Use `context` blocks for methods/properties
 This establishes a standardized structure for tests, allowing future readers to quickly scan and find important parts.
 
 * Instance methods/properties are prefixed with a `#`
@@ -73,7 +57,7 @@ context('#find()', function () {
 });
 ```
 
-## Use `describe` blocks for circumstantial groups
+### Use `describe` blocks for circumstantial groups
 Think of describe as 'when this...'
 
 ```javascript
@@ -86,9 +70,9 @@ context('when passed a variable', function () {
 describe('when passed a variable', function () {
     // ...
 });
-``` 
+```
 
-## `it` blocks should be declarative
+### `it` blocks should be declarative
 Do not start tests with `should`
 
 *Why?:* Should becomes repetitive
@@ -108,7 +92,45 @@ it('maps arrays', function () {
     // ...
 };
 ```
-## Use Sinon stubs
+
+## Scope
+### Each test starts and ends in an isolate scope
+Ensures that there are no side effects between tests
+
+*Why?:* You test what you expect to test and nothing else
+
+```javascript
+// Bad
+before(function () {
+    // ...
+});
+
+after(function () {
+
+});
+
+// Good
+
+beforeEach(function () {
+    // ...
+});
+
+afterEach(function() {
+    // ...
+});
+```
+### Scoped Variables
+Each scoped variable needs to be placed inside a beforeEach declaration
+
+- Prevents leaky values and side effects
+    
+Injected ng service components maintain their `$`
+
+- Maintains readability and expectations
+
+
+## Sinon
+### Use Sinon stubs
 
 Stubs allow observation of existing methods on fixtures and forcing the code down different paths to test all branches.
 
@@ -122,7 +144,8 @@ var serviceMock = sinon.mock({});
 var method = sinon.stub(service, 'method');
 ```
 
-## Use ngMock `inject`
+## ngMock
+### Use ngMock `inject`
 
 ngMock’s `inject` function allows you to resolve references to Angular fixtures.
 
@@ -137,7 +160,7 @@ beforeEach(inject(function (_myService_) {
 }));
 ```
 
-## Use ngMock `module`
+### Use ngMock `module`
 
 ngMock’s `module` function allows you to initialize modules and modify providers. The preferred method is to initialize your module and allow it to initialize its dependencies automatically. It is important that your module properly declares its dependencies on other Angular modules.
 
@@ -160,23 +183,11 @@ beforeEach(function () {
 });
 ```
 
-## Scoped Variables
-Each scoped variable needs to be placed inside a beforeEach declaration
-
-- Prevents leaky values and side effects
-    
-Injected ng service components maintain their `$`
-
-- Maintains readability and expectations
-
 ## Browsers
+### Karma Launchers
 
 There's no need for fancy Karma launchers. Just launch Karma and visit your IP address at the Karma hosted port (`9876`) on any device on the network.
 
 This is helpful to test in IE 9 and IE 10.
-
-## Tests are single expectations
-
-Each test should have one type of expectation. This helps in make more readable, and useful for debugging.
 
 # });
