@@ -9,7 +9,7 @@
 1. [Scope](#scope)
 1. [Sinon](#sinon)
 1. [ngMock](#ngmock)
-1. [Broswers](#browsers)
+1. [Browsers](#browsers)
 
 ## Linting
 ### Why use it?
@@ -189,5 +189,7 @@ beforeEach(function () {
 There's no need for fancy Karma launchers. Just launch Karma and visit your IP address at the Karma hosted port (`9876`) on any device on the network.
 
 This is helpful to test in IE 9 and IE 10.
+
+The `--verbose` flag of the 'up' build system will print your external IP. (`up s --verbose` or `up ta --verbose`)
 
 # });
