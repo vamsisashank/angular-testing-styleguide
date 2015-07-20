@@ -75,7 +75,7 @@ describe('when passed a variable', function () {
 ### `it` blocks should be declarative
 Do not start tests with `should`
 
-*Why?:* Should becomes repetitive
+*Why?:* `should...` becomes repetitive
 
 *Why?:* Angular is a declarative language and our tests follow that convention. We are not testing what steps
 our program *should* go through, we are testing what the output is. Our tests do not care about what
