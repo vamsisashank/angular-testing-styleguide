@@ -29,7 +29,7 @@ describe('nameOfFixture:', function () {
     'use strict';
 });
 ```
-### Use `context` blocks for methods/properties
+### Use `describe` blocks for methods/properties
 This establishes a standardized structure for tests, allowing future readers to quickly scan and find important parts.
 
 * Instance methods/properties are prefixed with a `#`
@@ -43,31 +43,31 @@ it('does something when something set up', function () {
 
 // Better
 
-context('find()', function () {
+describe('find()', function () {
     it('does something', function () {
         // ...
     });
 });
 
 // Best
-context('#find()', function () {
+describe('#find()', function () {
     it('does something', function () {
         // ...
     });
 });
 ```
 
-### Use `describe` blocks for circumstantial groups
+### Use `context` blocks for circumstantial groups
 Think of describe as 'when this...'
 
 ```javascript
 // Bad
-context('when passed a variable', function () {
+describe('when passed a variable', function () {
     // ...
 });
 
 // Good
-describe('when passed a variable', function () {
+context('when passed a variable', function () {
     // ...
 });
 ```
