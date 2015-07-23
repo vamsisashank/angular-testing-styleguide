@@ -34,6 +34,10 @@ This establishes a standardized structure for tests, allowing future readers to 
 
 * Instance methods/properties are prefixed with a `#`
 * Static methods are prefixed with a `.`
+* Functions are affixed with a `()`
+* Variables have no suffix
+
+*Why?:* Standardized indicators help establish the scope of a test
 
 ```javascript
 // Bad
