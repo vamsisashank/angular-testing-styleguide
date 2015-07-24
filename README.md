@@ -189,6 +189,16 @@ beforeEach(function () {
 });
 ```
 
+### Use `angular.module` for mocking other modules
+
+To mock out your dependencies on other modules, declare them with `angular.module`.
+
+```javascript
+beforeEach(function () {
+    angular.module('someoneElsesModule', []);
+});
+```
+
 ## Browsers
 ### Karma Launchers
 
