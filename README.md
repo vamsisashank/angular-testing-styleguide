@@ -64,7 +64,7 @@ describe('#find()', function () {
 ```
 
 ### Use `context` blocks for circumstantial groups
-Think of describe as 'when this...'
+Think of context as 'when this...'
 
 ```javascript
 // Bad
