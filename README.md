@@ -21,7 +21,7 @@ Tests are code, so they should be linted.
 ## Describe and Context Blocks
 ### Wrap spec in `describe` block
 
-Follow this convention for the message: `<name-of-fixture>:`. Do not include the word `spec` in the name
+Follow this convention for the message: `<name-of-fixture>:`. Do not include the word “spec” in the name
 
 *Why?:* 
 Spec has already been established by the filename.
@@ -36,14 +36,14 @@ This establishes a standardized structure for tests, allowing future readers to 
 
 * Instance methods/properties are prefixed with a `#`
 * Static methods are prefixed with a `.`
-* Functions are affixed with a `()`
-* Variables have no suffix
+* Functions are suffixed with a `()`
+* Properties have no suffix
 
 *Why?:* Standardized indicators help establish the scope of a test
 
 ```javascript
 // Bad
-it('does something when something set up', function () {
+it('find does something when something set up', function () {
     // ...
 });
 
