@@ -6,6 +6,7 @@
 
 ## Table of Contents
 
+1. [File Naming](#file-naming)
 1. [Linting](#linting)
 1. [Unit Testing Framework](#unit-testing-framework)
     1. [Karma](#karma)
@@ -34,6 +35,25 @@
     1. [Don’t use `$provide` when testing controllers](#dont-use-provide-when-testing-controllers)
 1. [Browsers](#browsers)
     1. [Karma Launchers](#karma-launchers)
+
+## File Naming
+### Naming and Location
+
+Using consistent names for file names is as important as properly named functions and methods. We use `feature.type.spec.js` for testing file names.
+
+Spec files reside next to the code they are testing. There are no `test` directories in any front-end Uptake code. 
+
+*Why?:* Naming conventions allow you to find code at a glance
+
+Example: 
+```
+└── auth
+    ├── auth.directive.js
+    ├── auth.directive.spec.js
+    ├── auth.html
+    ├── auth.service.js
+    └── auth.service.spec.js
+```
 
 ## Linting
 ### Why use it?
