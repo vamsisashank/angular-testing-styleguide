@@ -197,6 +197,25 @@ Injected ng service components maintain their `$`
 
 - Maintains readability and expectations
 
+```javascript
+describe('something', function () {
+    var $rootScope;
+    var element;
+    var scope;
+
+    beforeEach(inject(function ($compile, $rootScope) {
+        scope = $rootScope.$new();
+
+        element = $compile('<div></div>')(scope);
+
+        scope.$apply();
+    }));
+
+    it('is something', function () {
+        // ...
+    });
+});
+```
 
 ## Sinon
 ### Use Sinon stubs
