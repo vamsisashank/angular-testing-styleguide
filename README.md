@@ -299,6 +299,21 @@ beforeEach(module(function ($provide) {
 }));
 ```
 
+#### Don’t use `$provide` when testing controllers
+
+Controllers allow you to directly provide services. This makes overriding provided services unnecessary.
+
+```javascript
+// Ok:
+$provide('upContextService', upContextService);
+$controller('ExampleController');
+
+// Good:
+$controller('ExampleController', {
+     upContextService: upContextService
+});
+```
+
 ## Browsers
 ### Karma Launchers
 
