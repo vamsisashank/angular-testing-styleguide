@@ -12,6 +12,7 @@
 1. [Scope](#scope)
 1. [Sinon](#sinon)
 1. [ngMock](#ngmock)
+1. [Async](#async)
 1. [Browsers](#browsers)
 
 ## Linting
@@ -311,6 +312,40 @@ $controller('ExampleController');
 // Good:
 $controller('ExampleController', {
      upContextService: upContextService
+});
+```
+
+## Async
+### [`$httpBackend`](https://docs.angularjs.org/api/ngMock/service/$httpBackend)
+
+> Fake HTTP backend implementation suitable for unit testing applications that use the $http service.
+
+Use ngMock's fake `$httpBackend` implementation to test your use of `$http` without actually making XHR requests.
+
+Make sure to flush your requests using `$httpBackend.flush()`.
+
+```javascript
+$httpBackend.expectGET('/foo').respond(401, '');
+
+$httpBackend.flush();
+```
+
+### `done`
+
+Mocha’s `it` blocks provide a `done` handler which allows you to specify when an async test is complete. Even though ngMock makes our tests relatively synchronous, it is possible for tests to execute and skip callbacks in which key assertions are made. Avoid missing these callbacks by using `done`, which will fail tests that do not call the done callback.
+
+```javascript
+it('does something async', function (done) {
+    $httpBackend.expectGET('/contexts')
+        .respond(200, {});
+
+    upContextService.getToolContext()
+        .then(function (response) {
+            expect(response).to.be.an('object');
+            done();
+        });
+
+    $httpBackend.flush();
 });
 ```
 
