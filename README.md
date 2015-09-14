@@ -14,6 +14,7 @@
     1. [Chai](#chai)
     1. [Sinon](#sinon)
     1. [Sinon-Chai](#sinon-chai)
+1. [Coverage](#coverage)
 1. [Describe and Context Blocks](#describe-and-context-blocks)
     1. [Wrap spec in `describe` block](#wrap-spec-in-describe-block)
     1. [Use `describe` blocks for methods/properties](#use-describe-blocks-for-methodsproperties)
@@ -71,7 +72,7 @@ Tests are code, so they should be linted.
 
 > A simple tool that allows you to execute JavaScript code in multiple real browsers.
 
-Karma manages the configuration and setup for our unit testing.
+Karma manages the configuration and setup for our unit testing. Karma also provides our coverage reporting.
 
 ### [Mocha](http://mochajs.org/)
 
@@ -126,6 +127,16 @@ We prefer to use Sinon assertions without wrapping mocks in an `expect` call. Us
 contextService.getToolContext.should.have.been.calledOnce
     .and.calledWithExactly('color', 'Purple Mountains Majesty');
 ```
+
+## Coverage
+
+Code coverage measures how much of the source code of a project is executed by tests. It indicates coverage by statements, branches, functions, and lines. 
+
+Code coverage should not be treated as a quality target, but a tool to discover untested code.
+
+It is important to actually test all parts of a program, not just execute all parts. 
+
+Assert that methods have the expected effect, that directives compile correctly, and that config and run blocks execute as expected.
 
 ## Describe and Context Blocks
 ### Wrap spec in `describe` block
