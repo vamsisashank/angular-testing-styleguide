@@ -285,6 +285,20 @@ beforeEach(function () {
 });
 ```
 
+### Use `$provide` to mock services from other modules
+
+To mock out a service from another module, use ngMock’s `module` function to modify provided services. Passing a function to to `module` works like an Angular `config` statement, which is run before the application is bootstrapped.
+
+```javascript
+beforeEach(module(function ($provide) {
+    upContextService = {
+        getToolContext: sinon.stub()
+    };
+
+    $provide('upContextService', upContextService);
+}));
+```
+
 ## Browsers
 ### Karma Launchers
 
