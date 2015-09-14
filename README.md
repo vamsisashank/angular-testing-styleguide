@@ -256,7 +256,7 @@ beforeEach(inject(function (_myService_) {
 
 ngMock’s `module` function allows you to initialize modules and modify providers. The preferred method is to initialize your module and allow it to initialize its dependencies automatically. It is important that your module properly declares its dependencies on other Angular modules.
 
-ngMock publishes the function under `angular.mock.module` or directly on the window under `module` when testing.
+Use the alias to `angular.mock.module` ngMock publishes directly on the window under `module` when testing.
 
 ```javascript
 // Bad
