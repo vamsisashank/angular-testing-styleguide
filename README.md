@@ -7,6 +7,7 @@
 ## Table of Contents
 
 1. [Linting](#linting)
+1. [Unit Testing Framework](#unit-testing-framework)
 1. [Describe and Context Blocks](#describe-and-context-blocks)
 1. [Scope](#scope)
 1. [Sinon](#sinon)
@@ -17,6 +18,68 @@
 ### Why use it?
 
 Tests are code, so they should be linted.
+
+## Unit Testing Framework
+
+### [Karma](http://karma-runner.github.io/)
+
+> A simple tool that allows you to execute JavaScript code in multiple real browsers.
+
+Karma manages the configuration and setup for our unit testing.
+
+### [Mocha](http://mochajs.org/)
+
+> Mocha is a feature-rich JavaScript test framework running on Node.js and the browser, making asynchronous testing simple and fun. Mocha tests run serially, allowing for flexible and accurate reporting, while mapping uncaught exceptions to the correct test cases.
+
+Mocha is the core of our testing framework. Mocha tests are structured into blocks of `describe`, `context`, and `it` calls. `describe` blocks describe a thing, `context` blocks describe a set of context in which a unit is run, and `it` describes the expected behavior.
+
+```javascript
+describe('Thing', function () {
+    context('on init', function () {
+        it('returns `true`', function () {
+            // ...
+        });
+    });
+});
+```
+
+### [Chai](http://chaijs.com/)
+
+> Chai is a BDD / TDD assertion library for node and the browser that can be delightfully paired with any javascript testing framework.
+
+Chai handles our assertions. We use the BDD style assertions.
+
+```javascript
+expect(result).to.be.true();
+expect(obj).to.have.property('foo', 'bar');
+```
+
+### [Sinon](https://github.com/domenic/sinon-chai)
+
+> Standalone and test framework agnostic JavaScript test spies, stubs and mocks.
+
+Sinon provides our mocking functionality. We prefer to use mocks as much as possible as they allow you to finely control the control flow of your program.
+
+```javascript
+var contextService = {
+   getToolContext: sinon.stub()
+};
+
+// ...
+
+contextService.getToolContext.returns({});
+```
+
+### [Sinon-Chai](https://github.com/domenic/sinon-chai)
+
+> Sinon–Chai provides a set of custom assertions for using the Sinon.JS spy, stub, and mocking framework with the Chai assertion library. You get all the benefits of Chai with all the powerful tools of Sinon.JS.
+
+We prefer to use Sinon assertions without wrapping mocks in an `expect` call. Use `calledWithExactly` over `calledWith` when possible as it more strictly defines expectations. Use `calledOnce` and other specifiers for the amount of times when possible as well.
+
+```javascript
+contextService.getToolContext.should.have.been.calledOnce
+    .and.calledWithExactly('color', 'Purple Mountains Majesty');
+```
 
 ## Describe and Context Blocks
 ### Wrap spec in `describe` block
