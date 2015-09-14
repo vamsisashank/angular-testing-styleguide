@@ -230,6 +230,10 @@ var serviceMock = sinon.mock({});
 
 // Good
 var method = sinon.stub(service, 'method');
+
+var contextService = {
+    getToolContext: sinon.stub()
+};
 ```
 
 ## ngMock
