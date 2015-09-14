@@ -34,6 +34,11 @@
     1. [Don’t use `$provide` when testing controllers](#dont-use-provide-when-testing-controllers)
 1. [Browsers](#browsers)
     1. [Karma Launchers](#karma-launchers)
+1. [Examples](#examples)
+    1. [Services](#services)
+    1. [Controllers](#controllers)
+    1. [Directives](#directives)
+
 
 ## Linting
 ### Why use it?
@@ -320,12 +325,12 @@ beforeEach(module(function ($provide) {
 }));
 ```
 
-#### Don’t use `$provide` when testing controllers
+#### Use `$controller` when testing controllers
 
 Controllers allow you to directly provide services. This makes overriding provided services unnecessary.
 
 ```javascript
-// Ok:
+// Bad:
 $provide('upContextService', upContextService);
 $controller('ExampleController');
 
@@ -370,12 +375,125 @@ it('does something async', function (done) {
 ```
 
 ## Browsers
-### Karma Launchers
+#### Karma Launchers
 
 There's no need for fancy Karma launchers. Just launch Karma and visit your IP address at the Karma hosted port (`9876`) on any device on the network.
 
 This is helpful to test in IE 9 and IE 10.
 
 The `--verbose` flag of the 'up' build system will print your external IP. (`up s --verbose` or `up ta --verbose`)
+
+## Examples
+### Services
+
+Testing a service is as easy as injecting a dependency. Keep naming consistent to improve readability of tests.
+ 
+```javascript
+beforeEach(module('up.context-editor', function ($provide) {
+    upContextService = {
+        resetCache: sinon.stub()
+    };
+    
+    $provide.value('upContextService', upContextService);
+}));
+
+beforeEach(inject(function (_$httpBackend_, _upCeContextsService_) {
+    $httpBackend = _$httpBackend_;
+    upCeContextsService = _upCeContextsService_;
+}));
+
+describe('saveApplication', function () {
+    describe('organizationId', function () {
+        context('when already on the model', function () {
+            it('uses it immediately with the save', function () {
+                service.saveApplication(appInput);
+    
+                expect(applicationsStub.save).to.be.calledOnce;
+                expect(applicationsStub.save).to.be.calledWithMatch({
+                    'organizationId': 'MAW'
+                });
+            });
+        });
+    });
+});
+
+```
+
+### Controllers
+
+Use an `init` function, this allows you to change or test any behavior before a controller is initialized. Keep naming consistent to improve readability of tests. 
+
+```javascript
+beforeEach(module('up.context-editor.edit'));
+
+beforeEach(inject(function (_$controller_) {
+    $controller = _$controller_;
+
+    stateParams = {
+        appId: 'sampleId'
+    };
+}));
+
+function init() {
+    CeSelectLevelController = $controller('CeSelectLevelController', {
+        $stateParams: stateParams
+    });
+}
+
+describe('#appId', function () {
+    beforeEach(function () {
+        init();
+    });
+
+    it('is defined', function () {
+        expect(CeSelectLevelController.appId).to.equal('sampleId');
+    });
+});
+```
+
+### Directives
+
+Use a `compile` function to isolate the HTML elements of a directive. This allows you to set up expectations before the directive is compiled.
+
+```javascript
+beforeEach(module(function ($provide) {
+ 
+    upCeContextInputService = {
+        readPredefinedContextFile: sinon.stub()
+    };
+    upConfirmationModalService = {
+        open: sinon.stub()
+    };
+
+    $provide.value('upCeContextInputService', upCeContextInputService);
+    $provide.value('upConfirmationModalService', upConfirmationModalService);
+}));
+
+beforeEach(inject(function (_$compile_, _$q_, _$rootScope_) {
+    scope = _$rootScope_.$new();
+    $rootScope = _$rootScope_;
+    $compile = _$compile_;
+    $q = _$q_;
+}));
+
+function compile(toolObject) {
+    html = $compile(angular.element('<form name="myForm"><up-ce-context-input tool="tool"></up-ce-context-input></form>'))(scope);
+    scope.$apply();
+    isolateScope = angular.element((html.children())[0]).isolateScope();
+}
+
+describe('set predefinedContexts', function () {
+    context('when predefinedContexts is already set', function () {
+        it('does not overwrite', function () {
+            compile({
+                toolName: 'aTool',
+                predefinedContexts: {something: 'here'}
+            });
+
+            expect(scope.tool.predefinedContexts).to.deep.equal({something: 'here'});
+        });
+    });
+}):
+```
 
 # });
