@@ -183,6 +183,11 @@ describe('#find()', function () {
 });
 ```
 
+#### Nested `describe` blocks
+Only in very rare cases are nested `describe` blocks appropriate to use outside of the initial file set up. 
+
+If a method returns an object that has methods, it would be an appropriate to use a nested `describe` block. Almost all cases can be solved using a [context](#context) block.
+
 ### Use `context` blocks for circumstantial groups
 Think of context as 'when this...'
 
@@ -195,6 +200,41 @@ describe('when passed a variable', function () {
 // Good
 context('when passed a variable', function () {
     // ...
+});
+```
+
+#### Nested `context` blocks
+Use nested `context` blocks when your `it` statement includes words like `when, if, where, while, etc...`
+
+*Why?:* These are logical operators and means there are several situations that should to be tested  
+*Why?:* Helps break up tests into groups that represent functionality
+
+Used in situations similar to an `if` statement. It is frowned up to have `it` statements and `context` blocks on the same level.
+ 
+*Why?:* If one situation requires more context, all situations can benefit from further explanation. 
+
+Example:
+```javascript
+describe('#updateTool()', function () {
+    beforeEach(function () {
+        // set up
+    });
+
+    context('when valid', function () {
+        context('when optional param is passed', function () {
+            // do not put an it statement here if more context blocks are possible
+            context('when when api call succeeds', function () {
+                // it statements 
+            }); 
+        });
+        context('when optional param is not passed', function () {
+            // it statements 
+        });
+    });
+
+    context('when invalid', function () {
+        // it statements
+    });
 });
 ```
 
