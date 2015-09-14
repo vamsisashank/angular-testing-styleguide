@@ -28,6 +28,7 @@
 1. [Async](#async)
     1. [`$httpBackend`](#httpbackend)
     1. [`done`](#done)
+1. [Digest Cycle](#digest-cycle)
 1. [ngMock](#ngmock)
     1. [Use ngMock `inject`](#use-ngmock-inject)
     1. [Use ngMock `module`](#use-ngmock-module)
@@ -444,6 +445,17 @@ it('does something async', function (done) {
     $httpBackend.flush();
 });
 ```
+
+## Digest Cycle
+
+Angular uses the scope digest cycle for many internal functionalities, not just modifying scopes.
+
+* **`$httpBackend`:**
+    `$httpBackend.flush()` calls `$apply` behind the scenes. You should **not** call `$scope.$apply()` immediately after `$httpBackend.flush()` as it is redundant.
+* **`$q`:**
+    `$scope.$apply()` must be called to advance promises to their resolved state.
+* **`$timeout`:**
+    In absence of a `process.nextTick()` method, using `$timeout` without a delay pushes a callback into the next digest cycle. It is necessary to advance the digest cycle to call these callbacks.
 
 ## Browsers
 #### Karma Launchers
