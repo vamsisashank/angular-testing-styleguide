@@ -140,13 +140,13 @@ Assert that methods have the expected effect, that directives compile correctly,
 ## Describe and Context Blocks
 ### Wrap spec in `describe` block
 
-Follow this convention for the message: `<name-of-fixture>:`. Do not include the word “spec” in the name
+Follow this convention for the message: `<name-of-fixture>`. Do not include the word “spec” in the name.
 
 *Why?:* 
 Spec has already been established by the filename.
 
 ```javascript
-describe('nameOfFixture:', function () {
+describe('nameOfFixture', function () {
     'use strict';
 });
 ```
