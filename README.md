@@ -104,7 +104,7 @@ expect(obj).to.have.property('foo', 'bar');
 
 > Standalone and test framework agnostic JavaScript test spies, stubs and mocks.
 
-Sinon provides our mocking functionality. We prefer to use mocks as much as possible as they allow you to finely control the control flow of your program.
+Sinon provides our mocking functionality. We prefer to use stubs as much as possible as they allow you to finely control the control flow of your program.
 
 ```javascript
 var contextService = {
@@ -314,13 +314,18 @@ describe('something', function () {
 ```
 
 ## Sinon
-### Use Sinon stubs
+### [Use Sinon stubs](http://sinonjs.org/docs/#stubs)
 
 Stubs allow observation of existing methods on fixtures and forcing the code down different paths to test all branches.
 
 Mocks have been deprecated and will not be supported in `sinon@2`.
 
+Spies are useful for watching functions, but `sinon.stub` has all of the functionality and is more hands on. 
+
 ```javascript
+// Worst
+var serviceMock = function () { return 'string' };
+
 // Bad
 var serviceMock = sinon.mock({});
 
@@ -331,6 +336,67 @@ var contextService = {
     getToolContext: sinon.stub()
 };
 ```
+
+#### Example
+
+In this example there is an injection of the service `upUserService` which has a method `getCurrentUser` used by `LogOutController`. Since this test covers a controller, the service functionality needs to be mocked out. 
+
+Without `sinon.stub()`:
+```javascript
+beforeEach(function () {
+    upUserService = {
+        getCurrentUser: function () {
+            return {name: 'foo', email: 'bar'}
+        }
+    }
+    
+    LogOutController = $controller('LogOutController', {
+        upUserService: upUserService
+    }
+    
+    describe('#logout()', function() {
+        context('when a user is not logged in', function() {
+            it('does not call the logout API', function () {
+                LogOutController.logout();
+                // This test doesn't work 
+            });
+        });
+    });
+}
+```
+
+Because every time `getCurrentUser` is called it returns an instance of user, how can a test check out when the return value is `null`? 
+
+With `sinon.stub()`:
+```javascript
+beforeEach(function () {
+    upUserService = {
+        getCurrentUser: sinon.stub()
+    }
+    
+    LogOutController = $controller('LogOutController', {
+        upUserService: upUserService
+    }
+    
+    describe('#logout()', function() {
+        context('when a user is not logged in', function() {
+            beforeEach(function () {
+                upUserService.getCurrentUser.returns(null);
+            });
+            
+            it('does not call the logout API', function () {
+                LogOutController.logout();
+                // Test if the API was called
+            });
+        });
+    });
+}
+```
+
+As demonstrated in this example, the tests can now cover both positive and negative cases of `getCurrentUser` without relying on `upUserService`.  
+This can also be used to test how many times `getCurrentUser` was called. If the expectation is for it to be called twice, but it was only called once an easily missed bug is caught. In the original implementation there was no possible way to test this. 
+
+Stubs are extremely useful in the unit testing. Use them whenever possible.
 
 ## ngMock
 ### Use ngMock `inject`
