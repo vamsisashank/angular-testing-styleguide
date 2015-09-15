@@ -537,29 +537,24 @@ Testing a service is as easy as injecting a dependency. Keep naming consistent t
  
 ```javascript
 beforeEach(module('up.context-editor', function ($provide) {
-    upContextService = {
-        resetCache: sinon.stub()
+    upApplicationsService = { 
+        save: sinon.stub()
     };
     
-    $provide.value('upContextService', upContextService);
+    $provide.value('upApplicationService', upApplicationService);
 }));
 
-beforeEach(inject(function (_$httpBackend_, _upCeContextsService_) {
-    $httpBackend = _$httpBackend_;
+beforeEach(inject(function (_upCeContextsService_) {
     upCeContextsService = _upCeContextsService_;
 }));
 
-describe('saveApplication', function () {
-    describe('organizationId', function () {
-        context('when already on the model', function () {
-            it('uses it immediately with the save', function () {
-                service.saveApplication(appInput);
-    
-                expect(applicationsStub.save).to.be.calledOnce;
-                expect(applicationsStub.save).to.be.calledWithMatch({
-                    'organizationId': 'MAW'
-                });
-            });
+describe('#saveApplication()', function () {
+    context('with an organizationId on the model', function () {
+        it('uses it immediately with the save', function () {
+            upCeContextsService.saveApplication(appInput);
+
+            upApplicationsService.save.shoud.have.been.calledOnce
+                .and.calledWith({'organizationId': 'MAW'});
         });
     });
 });
