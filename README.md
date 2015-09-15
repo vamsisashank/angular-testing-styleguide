@@ -2,8 +2,6 @@
 
 *A style guide to good Angular testing practices*
 
-**THIS IS A PREVIEW DOCUMENT, RULES ARE SUBJECT TO CHANGE**
-
 ## Table of Contents
 
 1. [File Naming](#file-naming)
