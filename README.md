@@ -28,6 +28,7 @@
     1. [`$httpBackend`](#httpbackend)
     1. [`$timeout`](#timeout)
     1. [`done`](#done)
+1. [`$controller`](#controller)
 1. [Digest Cycle](#digest-cycle)
 1. [ngMock](#ngmock)
     1. [Use ngMock `inject`](#use-ngmock-inject)
@@ -532,6 +533,28 @@ it('does something async', function (done) {
         });
 
     $httpBackend.flush();
+});
+```
+
+## [`$controller`](https://docs.angularjs.org/api/ngMock/service/$controller)
+
+> `$controller` service is responsible for instantiating controllers.
+
+The `$controller` services allows you to instantiate a controller for testing. It requires the name of the controller as a string.
+
+Optionally, you can specify locals, which allow you to add mock dependencies which override the standard provided dependencies. This is helpful for mocking services and injecting dependencies coming from state resolves.
+
+ngMock’s implmentation of `$controller` is:
+
+> A decorator for `$controller` with additional `bindings` parameter, useful when testing controllers of directives that use `bindToController`.
+
+```javascript
+UpThingController = $controller('UpThingController', {
+    upContextService: upContextService
+}, {
+    context: {
+        foo: 'bar'
+    }
 });
 ```
 
