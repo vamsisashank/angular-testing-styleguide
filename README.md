@@ -18,6 +18,7 @@
     1. [Use `describe` blocks for methods/properties](#use-describe-blocks-for-methodsproperties)
     1. [Use `context` blocks for circumstantial groups](#use-context-blocks-for-circumstantial-groups)
     1. [`it` blocks should be declarative](#it-blocks-should-be-declarative)
+    1. [`.only`](`.only`)
 1. [Scope](#scope)
     1. [Each test starts and ends in an isolate scope](#each-test-starts-and-ends-in-an-isolate-scope)
     1. [Scoped Variables](#scoped-variables)
@@ -257,6 +258,14 @@ it('maps arrays', function () {
     // ...
 };
 ```
+
+### `.only`
+
+Adding `.only` to a `describe`, `context`, or `it` block will run only the specified suite. This is helpful to focus on testing areas of code.
+
+**Always** remove your `.only` before pushing your code.
+
+See: [Exclusive Tests](https://mochajs.org/#exclusive-tests)
 
 ## Scope
 ### Each test starts and ends in an isolate scope
