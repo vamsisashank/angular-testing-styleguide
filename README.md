@@ -25,6 +25,7 @@
     1. [Use Sinon stubs](#use-sinon-stubs)
 1. [Async](#async)
     1. [`$httpBackend`](#httpbackend)
+    1. [`$timeout`](#timeout)
     1. [`done`](#done)
 1. [Digest Cycle](#digest-cycle)
 1. [ngMock](#ngmock)
@@ -489,6 +490,21 @@ Make sure to flush your requests using `$httpBackend.flush()`.
 $httpBackend.expectGET('/foo').respond(401, '');
 
 $httpBackend.flush();
+```
+
+### [`$timeout`](https://docs.angularjs.org/api/ngMock/service/$timeout)
+
+> This service is just a simple decorator for $timeout service that adds a "flush" and "verifyNoPendingTasks" methods.
+
+ngMock’s `$timeout` implementation allows you to cycle through timeout schedules by calling `flush` with an interval to flush up to. The ngMock implementation emulates an advance in time without having to wait for the actual duration.
+
+ngMock’s `$timeout` also has a verification method, `verifyNoPendingTasks`, that verifies that all timeouts have been flushed.
+
+```javascript
+// advance 1 second
+$timeout.flush(1000);
+
+$timeout.verifyNoPendingTasks();
 ```
 
 ### `done`
