@@ -26,6 +26,9 @@
     1. [Use Sinon stubs](#use-sinon-stubs)
 1. [Async](#async)
     1. [`$httpBackend`](#httpbackend)
+        1. [`expect`](#expect)
+        1. [`flush`](#flush)
+        1. [Verify No Outstanding Expectations or Requests](#verify-no-outstanding-expectations-or-requests)
     1. [`$timeout`](#timeout)
     1. [`done`](#done)
 1. [Digest Cycle](#digest-cycle)
@@ -493,12 +496,57 @@ $controller('ExampleController', {
 
 Use ngMock's fake `$httpBackend` implementation to test your use of `$http` without actually making XHR requests.
 
-Make sure to flush your requests using `$httpBackend.flush()`.
+#### [`expect`](https://docs.angularjs.org/api/ngMock/service/$httpBackend#expect)
+
+> Request expectations provide a way to make assertions about requests made by the application and to define responses for those requests. The test will fail if the expected requests are not made or they are made in the wrong order.
+
+We use request expectations as the expectations are helpful to assert that calls are being made as expected.
+
+`$httpBackend` also includes aliases for the standard HTTP methods:
+
+* `expectGET`
+* `expectHEAD`
+* `expectDELETE`
+* `expectPOST`
+* `expectPUT`
+* `expectPATCH`
+* `expectJSONP`
+
+```javascript
+var thing = {
+    name: 'foo'
+};
+
+$httpBackend.expectPOST('/api/v1/thing').respond(200, thing);
+
+$httpBackend.expectGET('/api/v1/thing').respond(200, thing);
+
+$httpBackend.expectDELETE('/api/v1/thing').respond(200, thing);
+
+$httpBackend.expectGET('/api/v1/thing').respond(404, '');
+```
+
+#### [`flush`](https://docs.angularjs.org/api/ngMock/service/$httpBackend#flushing-http-requests)
+
+Make sure to flush your requests using `$httpBackend.flush()`. This causes pending HTTP requests to be processed.
+
+> This preserves the async api of the backend, while allowing the test to execute synchronously.
 
 ```javascript
 $httpBackend.expectGET('/foo').respond(401, '');
 
 $httpBackend.flush();
+```
+
+#### [Verify No Outstanding Expectations or Requests](https://docs.angularjs.org/api/ngMock/service/$httpBackend#verifyNoOutstandingExpectation)
+
+`$httpBackend` provides two methods to ensure no outstanding requests or expectations were made. If outstanding requests or expectations are found, an exception is thrown. Include this in an `afterEach` block for your test suite.
+
+```javascript
+describe('UpController', function () {
+    afterEach($httpBackend.verifyNoOutstandingExpectation);
+    afterEach($httpBackend.verifyNoOutstandingRequest);
+});
 ```
 
 ### [`$timeout`](https://docs.angularjs.org/api/ngMock/service/$timeout)
