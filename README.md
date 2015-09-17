@@ -595,7 +595,51 @@ describe('#appId', function () {
 
 ### Directives
 
-Use a `compile` function to isolate the HTML elements of a directive. This allows you to set up expectations before the directive is compiled.
+When testing directives the HTML needs to be set to be compiled, using [`$compile`](https://docs.angularjs.org/api/ng/service/$compile). This allows angular to link `scope` and the directive together.
+
+```javascript
+beforeEach(module('up.layout'));
+
+beforeEach(module(function ($provide) {
+    upUserService = {
+        getActiveUser: sinon.stub()
+    };
+
+    $provide.value('upUserService', upUserService);
+}));
+
+beforeEach(inject(function ($compile, _$rootScope_, _$timeout_) {
+    scope = _$rootScope_.$new();
+    $timeout = _$timeout_;
+    $compile('<nav up-header ></nav>')(scope);
+}));
+
+describe('#isOpen', function () {
+    context('when the user just logged in', function () {
+        beforeEach(function () {
+            upUserService.justLoggedIn = true;
+        });
+
+        it('opens the dropdown', function () {
+            $timeout.flush();
+            expect(scope.isOpen).to.be.true;
+        });
+    });
+
+    context('when the user was already logged in', function () {
+        beforeEach(function () {
+            upUserService.justLoggedIn = false;
+        });
+
+        it('does not open the dropdown', function () {
+            scope.$apply();
+            expect(scope.isOpen).to.be.false;
+        });
+    });
+});
+```
+
+If the directive has data bindings use a `compile` function to isolate the HTML elements of a directive. This allows you to test different situations and types of data that may be passed.
 
 ```javascript
 beforeEach(module(function ($provide) {
