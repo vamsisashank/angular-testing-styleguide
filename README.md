@@ -23,7 +23,9 @@
     1. [Each test starts and ends in an isolate scope](#each-test-starts-and-ends-in-an-isolate-scope)
     1. [Scoped Variables](#scoped-variables)
 1. [Sinon](#sinon)
-    1. [Use Sinon stubs](#use-sinon-stubs)
+    1. [Spies](#spies)
+    1. [Stubs](#stubs)
+    1. [Mocks](#mocks)
 1. [Async](#async)
     1. [`$httpBackend`](#httpbackend)
         1. [`expect`](#expect)
@@ -327,13 +329,53 @@ describe('something', function () {
 ```
 
 ## Sinon
-### [Use Sinon stubs](http://sinonjs.org/docs/#stubs)
+### [Spies](http://sinonjs.org/docs/#spies)
 
-Stubs allow observation of existing methods on fixtures and forcing the code down different paths to test all branches.
+A test spy intercepts the data used to call a function, along with other information, and allows it to continue on with normal operation. Only use spies when testing if an angular core module (e.g. $rootScope) was called, but not changing its functionality.  
 
-Mocks have been deprecated and will not be supported in `sinon@2`.
+```javascript
+// While not in `contextService`
+// Bad
+beforeEach(function () {
+    sinon.spy(contextService, 'getToolContext');
+}
 
-Spies are useful for watching functions, but `sinon.stub` has all of the functionality and is more hands on. 
+// Good
+beforeEach(function () {
+    sinon.spy($rootScope, '$emit');
+}
+```
+#### Example
+
+In this service when `#resetCache()` is called it triggers `$rootScope.$emit('up.core.navigationBar.reinit');`. The test needs to ensure this is called just once, but also needs the original functionality to happen. 
+
+```javascript
+beforeEach(module('up.core.applications'));
+
+beforeEach(inject(function(_$rootScope_) {
+    $rootScope = _$rootScope_;
+
+    sinon.spy($rootScope, '$emit');
+}));
+
+afterEach(function () {
+    $rootScope.$emit.restore();
+});
+
+describe('#resetCache()', function () {
+    it('emits "up.core.navigationBar.reinit"', function() {
+        upContextService.resetCache();
+
+        $rootScope.$emit.should.have.been.calledOnce
+            .and.calledWith('up.core.navigationBar.reinit');
+    });
+});
+```
+Here $rootScope is still functioning as expected, but allows insight into how is is being called.
+
+### [Stubs](http://sinonjs.org/docs/#stubs)
+
+Generally stubs are the best option when testing code. Stubs allow observation of existing methods on fixtures and forcing the code down different paths to test all branches.
 
 ```javascript
 // Worst
@@ -410,6 +452,10 @@ As demonstrated in this example, the tests can now cover both positive and negat
 This can also be used to test how many times `getCurrentUser` was called. If the expectation is for it to be called twice, but it was only called once an easily missed bug is caught. In the original implementation there was no possible way to test this. 
 
 Stubs are extremely useful in the unit testing. Use them whenever possible.
+
+### [Mocks](http://sinonjs.org/docs/#mocks)
+
+Mocks will be deprecated with sinon@2. Do not use them and replace any instance with spies or stubs.
 
 ## ngMock
 ### Use ngMock `inject`
