@@ -32,6 +32,7 @@
     1. [`$timeout`](#timeout)
     1. [`done`](#done)
 1. [Digest Cycle](#digest-cycle)
+1. [`$compile`](#compile)
 1. [ngMock](#ngmock)
     1. [Use ngMock `inject`](#use-ngmock-inject)
     1. [Use ngMock `module`](#use-ngmock-module)
@@ -593,6 +594,37 @@ Angular uses the scope digest cycle for many internal functionalities, not just 
     `$scope.$apply()` must be called to advance promises to their resolved state.
 * **`$timeout`:**
     In absence of a `process.nextTick()` method, using `$timeout` without a delay pushes a callback into the next digest cycle. It is necessary to advance the digest cycle to call these callbacks.
+
+## [`$compile`](https://docs.angularjs.org/api/ng/service/$compile)
+
+> Compiles an HTML string or DOM into a template and produces a template function, which can then be used to link `scope` and the template together.
+
+It is important to `$apply` the scope after rendering the element, as the initial scope must be applied for the HTML to be generated and the directive to be bootstrapped.
+
+The resulting JQLite wrapper allows you to inspect the DOM element, its scope, and isolated scope.
+
+It is frequently helpful to define an wrapper function which compiles and renders with the scope.
+
+```javascript
+var scope;
+
+beforeEach(function () {
+    scope = $rootScope.$new();
+});
+
+function getElement(scope) {
+    return $compile('<up-example></up-example>')(scope);
+}
+
+it('does something', function () {
+    var element = getElement(scope);
+
+    scope.$apply();
+
+    var isolateScope = element.isolateScope();
+    var scope = element.scope();
+});
+```
 
 ## Browsers
 #### Karma Launchers
